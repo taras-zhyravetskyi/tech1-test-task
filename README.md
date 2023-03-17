@@ -19,7 +19,7 @@ Clone the app from git repository and run the following command in the project r
 `mvn clean package`
 
 ## How to test app
-1. You can test endpoints in Postman collection with the next [link](https://api.postman.com/collections/25554531-76ce6991-240d-4a87-bf56-e5781380da1b?access_key=PMAT-01GVMVBZKJH75XBETN2G4DYT4Q). 
+1. You can test endpoints in Postman collection with the next [link](https://web.postman.co/workspace/3f81c689-d0c0-4f4e-8c22-4c17bdf2851f/collection/25554531-76ce6991-240d-4a87-bf56-e5781380da1b?action=share&creator=25554531). 
 2. Log in to obtain JWT as default user with credentials: 
        email: bob@gmail.com; password: 12345678;
     Or you can register a new user
