@@ -1,11 +1,16 @@
 package com.tech1test.security.jwt;
 
+import com.tech1test.exception.InvalidJwtAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import mate.academy.exception.InvalidJwtAuthenticationException;
+import java.util.Base64;
+import java.util.Date;
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,32 +18,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-
 @Component
+@RequiredArgsConstructor
 public class JwtTokenProvider {
-    @Value("${security.jwt.token.secret-key}")
+    private static final int TOKEN_START_INDEX = 7;
+    @Value("${security.jwt.token.secret-key:mySecretKey}")
     private String secretKey;
-    @Value("${security.jwt.token.expire-length}")
+    @Value("${security.jwt.token.expire-length:432000000}")
     private long validityInMilliseconds;
     private final UserDetailsService userDetailsService;
-
-    public JwtTokenProvider(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 
     @PostConstruct
     public void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String login, List<String> roles) {
+    public String createToken(String login) {
         Claims claims = Jwts.claims().setSubject(login);
-        claims.put("roles", roles);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
         return Jwts.builder()
@@ -51,8 +47,8 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUserName(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", 
-                userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(
+                userDetails, "", userDetails.getAuthorities());
     }
 
     private String getUserName(String token) {
@@ -62,7 +58,7 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer")) {
-            return bearerToken;
+            return bearerToken.substring(TOKEN_START_INDEX);
         }
         return null;
     }

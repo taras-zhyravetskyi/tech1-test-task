@@ -5,18 +5,16 @@ import com.tech1test.dto.response.UserResponseDto;
 import com.tech1test.dto.response.UserWithArticlesResponseDto;
 import com.tech1test.entity.User;
 import com.tech1test.service.ArticleService;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class UserMapper implements ResponseDtoMapper<UserResponseDto, User>,
-        RequestDtoMapper<UserRequestDto, User> {
+public class UserMapper {
     private final ArticleService articleService;
 
-    @Override
-    public UserResponseDto mapToDto(User user) {
+    public UserResponseDto toDto(User user) {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(user.getId());
         userResponseDto.setName(user.getName());
@@ -27,13 +25,12 @@ public class UserMapper implements ResponseDtoMapper<UserResponseDto, User>,
         return userResponseDto;
     }
 
-    @Override
-    public User mapToEntity(UserRequestDto dto) {
+    public User toEntity(UserRequestDto dto) {
         User user = new User();
         user.setName(dto.getName());
         user.setAge(dto.getAge());
         user.setArticles(dto.getArticleIds().stream()
-                .map(id -> articleService.get(id))
+                .map(id -> articleService.findById(id))
                 .collect(Collectors.toList()));
         return user;
     }

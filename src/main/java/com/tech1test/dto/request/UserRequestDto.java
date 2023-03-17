@@ -1,20 +1,22 @@
 package com.tech1test.dto.request;
 
-import com.tech1test.constants.ApplicationConstants;
+import java.util.List;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
 @Setter
+@RequiredArgsConstructor
 public class UserRequestDto {
+    private static final int MIN_USER_AGE = 10;
+    private static final int MAX_USER_AGE = 100;
+
     private String name;
-    @Min(ApplicationConstants.MIN_USER_AGE)
-    @Max(ApplicationConstants.MAX_USER_AGE)
+    @Min(MIN_USER_AGE)
+    @Max(MAX_USER_AGE)
     private Integer age;
     private List<Long> articleIds;
 }

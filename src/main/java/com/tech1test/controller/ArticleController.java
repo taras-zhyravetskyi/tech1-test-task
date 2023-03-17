@@ -1,6 +1,5 @@
 package com.tech1test.controller;
 
-
 import com.tech1test.dto.request.ArticleRequestDto;
 import com.tech1test.dto.response.ArticleResponseDto;
 import com.tech1test.entity.Article;
@@ -20,9 +19,11 @@ public class ArticleController {
     private final ArticleMapper articleMapper;
 
     @PostMapping
-    public ArticleResponseDto addArticle(@RequestBody ArticleRequestDto articleRequestDto) {
-        Article article = articleMapper.mapToEntity(articleRequestDto);
+    public ArticleResponseDto save(@RequestBody ArticleRequestDto articleRequestDto) {
+        Article article = articleMapper.toEntity(articleRequestDto);
         articleService.save(article);
-        return articleMapper.mapToDto(article);
+        ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
+        System.out.println("response dtp created");
+        return articleResponseDto;
     }
 }
