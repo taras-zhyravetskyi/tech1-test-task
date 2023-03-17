@@ -9,10 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -28,8 +26,8 @@ public class User {
     private Integer age;
     @OneToMany
     @JoinTable(name = "users_articles",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "article_id"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id"))
     private List<Article> articles;
 
     public User() {
@@ -46,6 +44,4 @@ public class User {
         this.age = age;
         this.articles = articles;
     }
-
-
 }
