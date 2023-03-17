@@ -1,19 +1,15 @@
 package com.tech1test.service;
 
-import com.tech1test.entity.Article;
+import com.tech1test.entity.Color;
 import com.tech1test.entity.User;
-
 import java.util.List;
-import java.util.Set;
 
 public interface UserService {
     User save(User user);
 
-    User get(Long id);
+    List<User> findByAgeGreaterThan(Integer age);
 
-    List<User> getByAgeGreaterThan(Integer age);
+    List<String> findUniqueNamesWithMoreArticlesThan(Long articles);
 
-    Set<String> getUniqueNamesWithMoreArticlesThan(Integer articles);
-
-    List<User> getWithArticlesByColor(Article.Color color);
+    List<User> findByArticlesColor(Color color);
 }
